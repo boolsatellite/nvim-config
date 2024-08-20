@@ -309,6 +309,7 @@ return {
             }
           }
         })
-        vim.cmd([[nnoremap <C-e> :Neotree reveal<cr>]])
+        -- <leader> e 
+        vim.api.nvim_set_keymap('n', '<leader>e', ':Neotree reveal<cr>', { noremap = true, silent = true })
       end
   }
