@@ -42,6 +42,55 @@ vim.keymap.set("n", "th", ":-tabnext<cr>", opts)    -- 上一个tab
 vim.keymap.set("n", "tl", ":+tabnext<cr>", opts)    -- 下一个tab
 vim.keymap.set("n", "td", ":tabclose<CR>", opts)    -- 删除当前tab
 
+
+vim.cmd([[
+nnoremap <F5> :call CompileRunGcc()<CR>
+
+func! CompileRunGcc()
+  exec "w"
+  if &filetype == 'c'
+    set splitbelow
+    exec "!g++ % -o %<"
+    sp | resize 12
+    term ./%<
+  elseif &filetype == 'cpp'
+    set splitbelow
+    exec "!g++ -std=c++17 % -Wall -o %<"
+    sp | resize 12
+    term ./%<
+  elseif &filetype == 'java'
+    set splitbelow
+    sp | resize 10
+    term javac % && time java %<
+  elseif &filetype == 'rust'
+    set splitbelow
+    sp | resize 10
+    term cargo run
+  elseif &filetype == 'sh'
+    set splitbelow
+    sp | resize 10
+    term bash %
+  elseif &filetype == 'python'
+    set splitbelow
+    sp | resize 12
+    term python3 %
+  elseif &filetype == 'html'
+    silent! exec "!".g:mkdp_browser." % &"
+  elseif &filetype == 'markdown'
+    exec ":MarkdownPreview"
+  elseif &filetype == 'javascript'
+    set splitbelow
+    sp | resize 12
+    term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
+  elseif &filetype == 'go'
+    set splitbelow
+    sp | resize 12
+    term go run .
+  endif
+endfunc
+]])
+
+
 -- todo: 与快速列表有关
 -- vim.keymap.set("n", "zo", ":lopen<cr>", opts)
 -- vim.keymap.set("n", "zm", ":lnext<cr>", opts)
