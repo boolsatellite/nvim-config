@@ -63,6 +63,10 @@ return {
     -- 🔗 clangd 的 on_attach：添加命令与快捷键
     ------------------------------------------------------------------------
     local function clangd_on_attach(client, bufnr)
+        if client.server_capabilities.inlayHintProvider then
+          -- 启用当前 buffer 的 Inlay Hints
+          vim.lsp.inlay_hint.enable(true, { buf = bufnr })
+        end
       -- 命令注册
       vim.api.nvim_buf_create_user_command(bufnr, 'LspClangdSwitchSourceHeader', function()
         switch_source_header(bufnr)
@@ -104,6 +108,16 @@ return {
     capabilities.textDocument.completion.completionItem.snippetSupport = false
     
     lspconfig['clangd'].setup({
+      init_options = {
+        InlayHints = {
+          Enabled = true,
+          ParameterNames = false,
+          DeducedTypes = true,
+          VariableTypes = true,
+          FunctionReturnTypes = true,
+        },
+      },
+
       capabilities = capabilities,
       on_attach = clangd_on_attach,
     })
