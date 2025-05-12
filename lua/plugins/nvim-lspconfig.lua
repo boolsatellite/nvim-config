@@ -88,6 +88,33 @@ return {
       })
     end
 
+    ------------------------------------------------------------------------
+    -- 🔗 rust 的 on_attach：添加命令与快捷键
+    ------------------------------------------------------------------------
+    local function reload_workspace(bufnr)
+      local clients = vim.lsp.get_clients { bufnr = bufnr, name = 'rust_analyzer' }
+      for _, client in ipairs(clients) do
+        vim.notify 'Reloading Cargo Workspace'
+        client.request('rust-analyzer/reloadWorkspace', nil, function(err)
+          if err then
+            error(tostring(err))
+          end
+          vim.notify 'Cargo workspace reloaded'
+        end, 0)
+      end
+    end
+
+    local function rust_analyzer_on_attach(client, bufnr)
+      if client.server_capabilities.inlayHintProvider then
+        -- 第一个参数 true 表示开启
+        -- 第二个参数表明作用到当前 buffer
+        vim.lsp.inlay_hint.enable(true, { buf = bufnr })
+      end
+      vim.api.nvim_buf_create_user_command(0, 'LspCargoReload', function()
+        reload_workspace(bufnr)
+      end, { desc = 'Reload current cargo workspace' })
+    end
+
 
 
     lspconfig['lua_ls'].setup({ 
@@ -121,6 +148,29 @@ return {
       capabilities = capabilities,
       on_attach = clangd_on_attach,
     })
+
+    lspconfig['rust_analyzer'].setup({
+      capabilities = capabilities,
+
+      settings = {
+        ["rust-analyzer"] = {
+          inlayHints = {
+            -- 启用所有行内提示功能
+            bindingModeHints       = { enable = true },       -- 绑定模式提示                   :contentReference[oaicite:3]{index=3}  
+            chainingHints          = { enable = true },       -- 链式调用中间结果提示             :contentReference[oaicite:4]{index=4}  
+            closingBraceHints      = { enable = true },       -- 在闭合大括号后显示提示           :contentReference[oaicite:5]{index=5}  
+            closureReturnTypeHints = { enable = "never" },    -- 闭包返回类型提示，可设 "always"/"never"/"if_multiple" :contentReference[oaicite:6]{index=6}  
+            lifetimeElisionHints   = { enable = true },       -- 生命周期省略提示                 :contentReference[oaicite:7]{index=7}  
+            -- parameterNames         = { enable = "all" },      -- 函数调用参数名提示                :contentReference[oaicite:8]{index=8}  
+            variableTypes          = { enable = true },       -- 局部变量类型提示                  :contentReference[oaicite:9]{index=9}  
+            functionReturnTypes    = { enable = true },       -- 函数返回类型提示                  :contentReference[oaicite:10]{index=10}  
+          },
+        },
+      },
+      on_attach = rust_analyzer_on_attach,
+    })
+
+
 
     -- Use LspAttach autocommand to only map the following keys
     -- after the language server attaches to the current buffer
