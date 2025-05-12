@@ -234,16 +234,19 @@ return {
         enabled = true,
         window = {
           min_width = 1,
-          max_width = 100,
-          max_height = 10,
+          max_width = 120,
+          max_height = 15,
           border = "single", -- Defaults to `vim.o.winborder` on nvim 0.11+ or 'padded' when not defined/<=0.10
           winblend = 0,
-          winhighlight = "Normal:BlinkCmpSignatureHelp,FloatBorder:BlinkCmpSignatureHelpBorder",
+          -- winhighlight = "Normal:BlinkCmpSignatureHelp,FloatBorder:BlinkCmpSignatureHelpBorder",
+          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+
           scrollbar = false, -- Note that the gutter will be disabled when border ~= 'none'
           -- Which directions to show the window,
           -- falling back to the next direction when there's not enough space,
           -- or another window is in the way
-          direction_priority = { "n" },
+          -- direction_priority = { "n" },
+          direction_priority = { "n", "s", "e", "w" },
           -- Disable if you run into performance issues
           treesitter_highlighting = true,
           show_documentation = true,

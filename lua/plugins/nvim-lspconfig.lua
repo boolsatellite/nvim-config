@@ -101,6 +101,8 @@ return {
         },
     })
 
+    capabilities.textDocument.completion.completionItem.snippetSupport = false
+    
     lspconfig['clangd'].setup({
       capabilities = capabilities,
       on_attach = clangd_on_attach,
