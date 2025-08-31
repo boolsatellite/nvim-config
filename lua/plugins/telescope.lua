@@ -1,34 +1,65 @@
 return {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.8',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+        {
+            'nvim-telescope/telescope-fzf-native.nvim',
+            build = 'make',
+        },
+    },
+    cmd = "Telescope",  -- Lazy load
+    keys = {
+        { "<leader>ff", function() require('telescope.builtin').find_files() end, desc = "[Telescope] Find files" },
+        { "<leader>fg", function() require('telescope.builtin').live_grep() end, desc = "[Telescope] Live grep" },
+        { "<leader>fb", function() require('telescope.builtin').buffers() end, desc = "[Telescope] Buffers" },
+        { "<leader>fh", function() require('telescope.builtin').help_tags() end, desc = "[Telescope] Help tags" },
+        { "<leader>fr", function() require('telescope.builtin').registers() end, desc = "[Telescope] Registers" },
+        { "<leader>lr", function() require('telescope.builtin').lsp_references() end, desc = "[Telescope] LSP References" },
+        { "gr", function() require('telescope.builtin').lsp_references() end, desc = "[Telescope] LSP References" },
+        { "<leader>cq", function() require('telescope.builtin').quickfix() end, desc = "[Telescope] Quickfix" },
+        { "<leader>fd", function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end, desc = "[Telescope] Diagnostics (buffer)" },
+
+    },
     config = function ()
+        local telescope = require("telescope")
 
+        telescope.setup{
+            defaults = {
+                vimgrep_arguments = {
+                    "rg",
+                    "--color=never",
+                    "--no-heading",
+                    "--with-filename",
+                    "--line-number",
+                    "--column",
+                    "--smart-case",
+                },
+                find_command = {
+                    "fd", "--type", "f", "--hidden",
+                    "--exclude", ".git",
+                    "--exclude", "node_modules",
+                    "--exclude", "dist",
+                    "--exclude", "target",
+                },
+                mappings = {
+                    i = {
+                        ["<C-q>"] = require('telescope.actions').close,
+                    },
+                },
+            },
+            extensions = {
+                fzf = {
+                    fuzzy = true,
+                    override_generic_sorter = true,
+                    override_file_sorter = true,
+                    case_mode = "smart_case",
+                },
+            },
+        }
 
-
-
-
-        local builtin = require('telescope.builtin')
-        vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-        vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
-        vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-        vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
-
-        vim.keymap.set('n', '<leader>lr', builtin.lsp_references, { desc = "LSP: Find References" })
-        vim.keymap.set('n', 'gr', builtin.lsp_references, { desc = "LSP: Find References" })
-        
-        -- vim.keymap.set('n', '<leader>ls', builtin.lsp_document_symbols, { desc = "LSP: Document Symbols" })
-        -- vim.keymap.set('n', '<leader>lS', builtin.lsp_workspace_symbols, { desc = "LSP: Workspace Symbols" })
-        vim.keymap.set('n', '<leader>lW', builtin.lsp_dynamic_workspace_symbols,
-            { desc = "LSP: Dynamic Workspace Symbols" })
-        vim.keymap.set('n', '<leader>ld', function() builtin.diagnostics({ bufnr = 0 }) end,
-            { desc = "LSP: Diagnostics (current buffer)" })
-        vim.keymap.set('n', '<leader>lI', builtin.lsp_implementations, { desc = "LSP: Implementations" })
-        vim.keymap.set('n', '<leader>ldf', builtin.lsp_definitions, { desc = "LSP: Definitions" })
-        vim.keymap.set('n', '<leader>ltd', builtin.lsp_type_definitions, { desc = "LSP: Type Definitions" })
-        vim.keymap.set("n", "<leader>cq", builtin.quickfix, { desc = "Quickfix Errors" })
-        vim.keymap.set("n", "<leader>fr", builtin.registers	, { desc = "Telescope find registers" })
-  
-
+        -- 加载扩展
+        pcall(telescope.load_extension, "fzf")
+        pcall(telescope.load_extension, "noice")
     end
 }

@@ -66,10 +66,10 @@ return {
 
                     vim.keymap.set("n", "<leader>gk", vim.lsp.buf.signature_help, {
                         buffer = ev.buf,
-                        desc = "[LSP] Signature help" 
+                        desc = "[LSP] Signature help"
                     })
 
-                    vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, { 
+                    vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, {
                         desc = "[LSP] Add workspace folder"
                     })
 
@@ -80,12 +80,12 @@ return {
                     vim.keymap.set("n", "<leader>wl", function()
                             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
                         end, {
-                        desc = "[LSP] List workspace folders" 
+                        desc = "[LSP] List workspace folders"
                     })
 
                     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, {
-                        buffer = ev.buf, 
-                        desc = "[LSP] Rename" 
+                        buffer = ev.buf,
+                        desc = "[LSP] Rename"
                     })
 
                     vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
@@ -125,7 +125,7 @@ return {
 
                     -- vim.keymap.set("n", "<leader>ca", require("telescope.builtin").lsp_code_actions, {
                     --     buffer = ev.buf,
-                    --     desc = "Telescope Code Actions" 
+                    --     desc = "Telescope Code Actions"
                     -- })
                     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {
                         buffer = ev.buf,

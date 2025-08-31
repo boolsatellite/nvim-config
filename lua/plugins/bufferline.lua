@@ -1,7 +1,7 @@
-return { 
-    'akinsho/bufferline.nvim', 
-    priority = 999,
-    version = "*", 
+return {
+    'akinsho/bufferline.nvim',
+    lazy = false,
+    version = "*",
     dependencies = 'nvim-tree/nvim-web-devicons',
     keys = {
         { "L", "<Cmd>BufferLineCycleNext<CR>", mode = "n", desc = "next buffer" },
