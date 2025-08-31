@@ -10,8 +10,10 @@ return {
       -- {"rcarriga/nvim-notify", opts = {background_colour = "#000000"}}
     },
     keys = {
-      { "<leader>sN", "<CMD>Noice pick<CR>", desc = "[Noice] Pick history messages" },
-      { "<leader>N", "<CMD>Noice<CR>", desc = "[Noice] Show history messages" },
+      {"<leader>nc", "<cmd>Noice dismiss<CR>", { desc = "Noice: Clear all messages" }},
+      {"<leader>N", "<cmd>Telescope noice<CR>", { desc = "Noice: Show all history via Telescope" }},
+      { "<leader>NH", "<cmd>Noice<CR>", desc = "[Noice] Show all messages" },  -- 原生 Noice
+
     },
 
     opts = {
@@ -19,7 +21,7 @@ return {
         enabled = false,
       },
       notify = {
-        enabled = false,
+        enabled = true,
       },
       lsp = {
 
@@ -31,7 +33,7 @@ return {
       },
       -- you can enable a preset for easier configuration
       presets = {
-        bottom_search = false, -- use a classic bottom cmdline for search
+        bottom_search = true, -- use a classic bottom cmdline for search
         command_palette = true, -- position the cmdline and popupmenu together
         long_message_to_split = true, -- long messages will be sent to a split
         inc_rename = false, -- enables an input dialog for inc-rename.nvim
@@ -39,9 +41,9 @@ return {
       },
       routes = {
         -- Hide search count
-        { filter = { event = "msg_show", kind = "search_count" }, opts = { skip = true } },
+        -- { filter = { event = "msg_show", kind = "search_count" }, opts = { skip = true } },
         -- Hide written message
-        { filter = { event = "msg_show", kind = "" }, opts = { skip = true } },
+        -- { filter = { event = "msg_show", kind = "" }, opts = { skip = true } },
       },
     },
 }
